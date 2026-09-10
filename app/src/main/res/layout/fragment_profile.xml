@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profil Saya"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_marginBottom="24dp"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_profil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Kartu Data Pribadi (M3 Style) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Data Pribadi" android:textStyle="bold" android:textColor="#2196F3" android:layout_marginBottom="12dp"/>
+                <TextView android:id="@+id/tv_prof_nama" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nama: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_nisn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NISN: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_ttl" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TTL: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_asal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Asal Sekolah: -" android:textColor="#424242"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Kartu Data Orang Tua (M3 Style) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Data Orang Tua" android:textStyle="bold" android:textColor="#2196F3" android:layout_marginBottom="12dp"/>
+                <TextView android:id="@+id/tv_prof_ayah" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ayah: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_ibu" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ibu: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_alamat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Alamat: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_telp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Telp/HP: -" android:textColor="#424242"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Kartu Data Wali (M3 Style) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Data Wali" android:textStyle="bold" android:textColor="#2196F3" android:layout_marginBottom="12dp"/>
+                <TextView android:id="@+id/tv_prof_wali_nama" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nama: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_wali_kerja" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pekerjaan: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_wali_alamat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Alamat: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_wali_telp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Telp/HP: -" android:textColor="#424242"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Kartu Akademik (M3 Style) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            app:cardBackgroundColor="#E3F2FD"> <!-- Warna latar khusus agar stand out -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Akademik &amp; Hasil Pemetaan" android:textStyle="bold" android:textColor="#1976D2" android:layout_marginBottom="12dp"/>
+                <TextView android:id="@+id/tv_prof_raport" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rata-rata Raport: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_skor" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Skor: -" android:textColor="#424242" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tv_prof_status" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status: -" android:textStyle="bold" android:textColor="#000000" android:layout_marginTop="4dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tombol Logout Modern -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_logout_siswa"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Keluar (Logout)"
+            android:textSize="16sp"
+            app:cornerRadius="16dp"
+            app:backgroundTint="#FFEBEE"
+            android:textColor="#D32F2F"
+            app:strokeWidth="1dp"
+            app:strokeColor="#FFCDD2"
+            app:icon="@android:drawable/ic_menu_revert"
+            app:iconTint="#D32F2F"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

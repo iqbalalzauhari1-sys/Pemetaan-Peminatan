@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.iqbal.pemetaanpeminatan.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+
+        <!-- Rute ke Register (Dibiarkan saja) -->
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+
+        <!-- Rute ke Dasbor Siswa (Dibiarkan saja) -->
+        <action
+            android:id="@+id/action_loginFragment_to_siswaFragment"
+            app:destination="@id/siswaFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Rute ke Dasbor Admin (UBAH DESTINATION-NYA SAJA) -->
+        <action
+            android:id="@+id/action_loginFragment_to_adminFragment"
+            app:destination="@id/adminHomeFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.iqbal.pemetaanpeminatan.AdminFragment"
+        android:label="fragment_admin"
+        tools:layout="@layout/fragment_admin">
+        <action
+            android:id="@+id/action_adminFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/main_navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.iqbal.pemetaanpeminatan.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/siswaFragment"
+        android:name="com.iqbal.pemetaanpeminatan.SiswaFragment"
+        android:label="fragment_siswa"
+        tools:layout="@layout/fragment_siswa">
+        <action
+            android:id="@+id/action_siswaFragment_to_inputAkademikFragment"
+            app:destination="@id/inputAkademikFragment" />
+        <action
+            android:id="@+id/action_siswaFragment_to_inputPribadiFragment"
+            app:destination="@id/inputPribadiFragment" />
+        <action
+            android:id="@+id/action_siswaFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/main_navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.iqbal.pemetaanpeminatan.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile">
+
+        <!-- Rute Logout Siswa (Sangat Penting) -->
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/siswaFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Kumpulan Fragment Admin Baru -->
+    <fragment
+        android:id="@+id/adminHomeFragment"
+        android:name="com.iqbal.pemetaanpeminatan.AdminHomeFragment"
+        android:label="fragment_admin_home"
+        tools:layout="@layout/fragment_admin_home" />
+
+    <fragment
+        android:id="@+id/adminKuotaFragment"
+        android:name="com.iqbal.pemetaanpeminatan.AdminKuotaFragment"
+        android:label="fragment_admin_kuota"
+        tools:layout="@layout/fragment_admin_kuota" />
+
+    <fragment
+        android:id="@+id/adminProfileFragment"
+        android:name="com.iqbal.pemetaanpeminatan.AdminProfileFragment"
+        android:label="fragment_admin_profile"
+        tools:layout="@layout/fragment_admin_profile">
+
+        <!-- Rute khusus untuk tombol Logout Admin -->
+        <action
+            android:id="@+id/action_adminProfileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminKelasFragment"
+        android:name="com.iqbal.pemetaanpeminatan.AdminKelasFragment"
+        android:label="fragment_admin_kelas"
+        tools:layout="@layout/fragment_admin_kelas">
+
+        <action
+            android:id="@+id/action_adminKelasFragment_to_adminDetailKelasFragment"
+            app:destination="@id/adminDetailKelasFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminDetailKelasFragment"
+        android:name="com.iqbal.pemetaanpeminatan.AdminDetailKelasFragment"
+        android:label="fragment_admin_detail_kelas"
+        tools:layout="@layout/fragment_admin_detail_kelas" />
+    <fragment
+        android:id="@+id/inputPribadiFragment"
+        android:name="com.iqbal.pemetaanpeminatan.InputPribadiFragment"
+        android:label="fragment_input_pribadi"
+        tools:layout="@layout/fragment_input_pribadi" />
+    <fragment
+        android:id="@+id/inputAkademikFragment"
+        android:name="com.iqbal.pemetaanpeminatan.InputAkademikFragment"
+        android:label="fragment_input_akademik"
+        tools:layout="@layout/fragment_input_akademik" />
+</navigation>

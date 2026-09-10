@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- PENTING: ID di sini harus SAMA PERSIS dengan ID fragment di main_navigation.xml -->
+    <item
+        android:id="@+id/siswaFragment"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Akademik" />
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Profil" />
+</menu>

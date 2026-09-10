@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#FAFAFA">
+
+    <!-- Header Dasbor Admin -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Distribusi Kelas"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_info_eksekusi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tekan tombol di bawah untuk memproses pemetaan peminatan siswa dan pembagian kelas."
+        android:textSize="14sp"
+        android:textColor="#757575"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- SATU TOMBOL EKSEKUSI GLOBAL M3 -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_eksekusi_global"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:text="Mulai Distribusi"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        app:backgroundTint="#4CAF50"
+        app:iconGravity="textStart"
+        android:layout_marginBottom="16dp"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Daftar Siswa Hasil Eksekusi -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_hasil_spk"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp"
+        tools:listitem="@layout/item_hasil_spk" />
+
+</LinearLayout>

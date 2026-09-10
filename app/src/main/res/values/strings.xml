@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">PemetaanPeminatan</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="school_name">SMAN 1 WANAYASA</string>
+    <string name="location_name">PURWAKARTA</string>
+    <string name="content_description_school_logo">Logo SMAN 1 Wanayasa</string>
+
+    <string-array name="daftar_jurusan">
+        <item>Pilih Peminatan...</item>
+        <item>FISIKA</item>
+        <item>KIMIA</item>
+        <item>IPA</item>
+        <item>IPS</item>
+        <item>SOSIOLOGI</item>
+        <item>GEOGRAFI</item>
+    </string-array>
+
+</resources>

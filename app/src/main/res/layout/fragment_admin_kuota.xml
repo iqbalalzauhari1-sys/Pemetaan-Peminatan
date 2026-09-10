@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pengaturan Kuota"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Atur jumlah kelas dan kapasitas maksimal (kuota) untuk masing-masing kelas dan peminatan."
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="24dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Pilih Jurusan / Peminatan"
+            app:startIconDrawable="@android:drawable/ic_menu_sort_by_size"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/dropdown_peminatan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                app:simpleItems="@array/daftar_jurusan" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kelas Utama (Wajib)" android:textStyle="bold" android:textColor="#1976D2" android:layout_marginBottom="12dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nama Kelas (Cth: 11 FISIKA 1)" android:layout_marginBottom="12dp">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_nama_kelas_1" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Kuota Maksimal Siswa">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_kuota_kelas_1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- KARTU KEDUA: KELAS TAMBAHAN (MAX 3) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            app:cardBackgroundColor="#F5F5F5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kelas Tambahan (Opsional)" android:textStyle="bold" android:textColor="#757575" android:layout_marginBottom="12dp"/>
+
+                <!-- Opsi Kelas 2 -->
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nama Kelas 2 (Opsional)">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_nama_kelas_2" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Kuota Kelas 2" android:layout_marginBottom="12dp">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_kuota_kelas_2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginBottom="12dp"/>
+
+                <!-- Opsi Kelas 3 -->
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nama Kelas 3 (Opsional)">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_nama_kelas_3" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Kuota Kelas 3" android:layout_marginBottom="12dp">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_kuota_kelas_3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginBottom="12dp"/>
+
+                <!-- Opsi Kelas 4 -->
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nama Kelas 4 (Opsional)">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_nama_kelas_4" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Kuota Kelas 4" android:layout_marginBottom="12dp">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/edt_kuota_kelas_4" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_simpan_kuota"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Simpan Pengaturan Kuota"
+            android:textSize="16sp"
+            app:cornerRadius="16dp"
+            android:backgroundTint="#FF9800"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_kuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
