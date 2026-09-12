@@ -4,11 +4,13 @@ from sqlalchemy import or_
 import models, schemas
 from database import engine, SessionLocal
 from fastapi.responses import StreamingResponse
+from passlib.context import CryptContext
 import pandas as pd
 import io
 
 models.Base.metadata.create_all(bind=engine)
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 app = FastAPI(title="API Pemetaan Peminatan Siswa Super Algoritma")
 
 def get_db():
@@ -48,7 +50,7 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
 @app.post("/login/")
 def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == data.nisn).first()
-    if not user or user.password != data.password:
+    if not user or not pwd_context.verify(data.password, user.password):
         raise HTTPException(status_code=401, detail="NISN atau Password salah!")
     return {"status": "Sukses", "pesan": "Login berhasil!", "role": user.role, "nisn": user.username}
 
