@@ -30,7 +30,9 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     if cek_user:
         raise HTTPException(status_code=400, detail="NISN sudah terdaftar!")
 
-    db_user = models.User(username=data.nisn, password=data.password, role="siswa")
+    # Enkripsi password sebelum dimasukkan ke database
+    hashed_password = pwd_context.hash(data.password)
+    db_user = models.User(username=data.nisn, password=hashed_password, role="siswa")
     db.add(db_user)
     db.commit()
     db.refresh(db_user) 
