@@ -40,7 +40,8 @@ class LoginViewModel : ViewModel() {
                 if (response.isSuccessful && response.body() != null) {
                     _responseServer.value = response.body()
                 } else {
-                    _pesanError.value = Event("Login Gagal: NISN atau Password salah!")
+                    val errorMsg = response.errorBody()?.string() ?: "Error code: ${response.code()}"
+                    _pesanError.value = Event("Gagal (${response.code()}): $errorMsg")
                 }
             }
 

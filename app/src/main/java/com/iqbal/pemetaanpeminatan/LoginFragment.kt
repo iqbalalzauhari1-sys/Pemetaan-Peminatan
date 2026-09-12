@@ -41,8 +41,8 @@ class LoginFragment : Fragment() {
 
         // Aksi Tombol Login
         binding.btnLogin.setOnClickListener {
-            val nisn = binding.edtNisn.text.toString()
-            val password = binding.edtPassword.text.toString()
+            val nisn = binding.edtNisn.text.toString().trim()
+            val password = binding.edtPassword.text.toString().trim()
 
             if (nisn.isNotEmpty() && password.isNotEmpty()) {
                 viewModel.prosesLogin(nisn, password)
