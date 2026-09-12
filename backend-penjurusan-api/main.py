@@ -426,3 +426,7 @@ def cari_siswa_global(q: str = "", db: Session = Depends(get_db)):
     ).limit(20).all() # Batasi 20 nama agar aplikasi tidak berat
     
     return hasil
+
+@app.get("/cek-update")
+def cek_update():
+    return {"status": "Kode baru berhasil masuk ke Railway!"}
