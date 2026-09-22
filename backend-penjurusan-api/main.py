@@ -166,7 +166,7 @@ def eksekusi_penjurusan_global(db: Session = Depends(get_db)):
     if not semua_siswa:
         raise HTTPException(status_code=400, detail="Belum ada siswa yang mengisi nilai akademik.")
 
-    # 1. Normalisasi (SAW) - Cari Nilai Maksimal Global
+    # 1. Normalisasi  - Cari Nilai Maksimal Global
     max_raport = max([s.nilai_raport for s in semua_siswa])
     max_literasi = max([s.nilai_literasi for s in semua_siswa])
     max_numerasi = max([s.nilai_numerasi for s in semua_siswa])
