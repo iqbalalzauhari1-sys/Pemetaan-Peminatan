@@ -144,8 +144,6 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
         jurusan.kapasitas_total = total_kuota
         db.commit()
 
-    
-
     # 2. Hapus data kelas lama milik jurusan ini
     # [TAMBAHAN BARU] Putuskan dulu relasi foreign key dari tb_siswa
     kelas_lama = db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).all()
