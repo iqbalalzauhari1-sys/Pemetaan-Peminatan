@@ -144,7 +144,15 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
         jurusan.kapasitas_total = total_kuota
         db.commit()
 
-    # 2. Hapus data kelas lama milik jurusan ini (Reset) agar tidak menumpuk
+    
+
+    # 2. Hapus data kelas lama milik jurusan ini
+    # [TAMBAHAN BARU] Putuskan dulu relasi foreign key dari tb_siswa
+    kelas_lama = db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).all()
+    for kl in kelas_lama:
+        db.query(models.Siswa).filter(models.Siswa.id_kelas_diterima == kl.id_kelas).update({"id_kelas_diterima": None, "status_validasi_nilai": "Menunggu Proses"})
+
+    # Setelah relasi aman, baru hapus kelasnya
     db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).delete()
     
     # 3. Masukkan kelas yang baru
