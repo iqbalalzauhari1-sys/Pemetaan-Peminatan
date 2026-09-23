@@ -141,21 +141,17 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
         jurusan.kapasitas_total = total_kuota
         db.commit()
 
-    # PROSES HAPUS YANG AMAN (TIDAK MEMICU ERROR FOREIGN KEY)
+    # Hapus relasi dengan aman sebelum menghapus kelas
     kelas_lama = db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).all()
     for kl in kelas_lama:
-        # A. Kosongkan dulu id_kelas di tabel siswa
         db.query(models.Siswa).filter(models.Siswa.id_kelas_diterima == kl.id_kelas).update(
             {"id_kelas_diterima": None, "status_validasi_nilai": "Menunggu Proses"}, 
             synchronize_session=False
         )
         db.commit()
-
-        # B. Setelah siswa aman, baru hapus kelasnya
         db.delete(kl)
         db.commit()
     
-    # Masukkan kelas yang baru
     for kelas in data.daftar_kelas:
         kelas_baru = models.Kelas(
             nama_kelas=kelas.nama_kelas, 
