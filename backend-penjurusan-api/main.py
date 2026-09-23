@@ -130,7 +130,6 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
     total_kuota = sum([k.kuota_kelas for k in data.daftar_kelas])
     nama_pem_upper = data.nama_peminatan.upper()
     
-    # 1. Cek apakah jurusan sudah ada
     jurusan = db.query(models.Peminatan).filter(models.Peminatan.nama_peminatan == nama_pem_upper).first()
     
     if not jurusan:
@@ -142,23 +141,21 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
         jurusan.kapasitas_total = total_kuota
         db.commit()
 
-    # 2. HAPUS KELAS LAMA (CARA LEBIH AMAN MENGHINDARI ERROR 500)
+    # PROSES HAPUS YANG AMAN (TIDAK MEMICU ERROR FOREIGN KEY)
     kelas_lama = db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).all()
     for kl in kelas_lama:
-        # A. Putuskan relasi siswa secara eksplisit satu per satu
-        siswa_terdampak = db.query(models.Siswa).filter(models.Siswa.id_kelas_diterima == kl.id_kelas).all()
-        for s in siswa_terdampak:
-            s.id_kelas_diterima = None
-            s.status_validasi_nilai = "Menunggu Proses"
-        
-        db.commit() # Simpan pemutusan relasi ke database
+        # A. Kosongkan dulu id_kelas di tabel siswa
+        db.query(models.Siswa).filter(models.Siswa.id_kelas_diterima == kl.id_kelas).update(
+            {"id_kelas_diterima": None, "status_validasi_nilai": "Menunggu Proses"}, 
+            synchronize_session=False
+        )
+        db.commit()
 
-        # B. Hapus objek kelasnya
+        # B. Setelah siswa aman, baru hapus kelasnya
         db.delete(kl)
+        db.commit()
     
-    db.commit() # Simpan penghapusan kelas ke database
-    
-    # 3. Masukkan kelas yang baru
+    # Masukkan kelas yang baru
     for kelas in data.daftar_kelas:
         kelas_baru = models.Kelas(
             nama_kelas=kelas.nama_kelas, 
