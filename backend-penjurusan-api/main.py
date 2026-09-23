@@ -134,30 +134,29 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
     jurusan = db.query(models.Peminatan).filter(models.Peminatan.nama_peminatan == nama_pem_upper).first()
     
     if not jurusan:
-        # Jika belum ada, buat baru
         jurusan = models.Peminatan(nama_peminatan=nama_pem_upper, kapasitas_total=total_kuota)
         db.add(jurusan)
         db.commit()
         db.refresh(jurusan)
     else:
-        # Jika sudah ada, update total kuotanya
         jurusan.kapasitas_total = total_kuota
         db.commit()
 
-# 2. Hapus data kelas lama milik jurusan ini
-    # Putuskan dulu relasi foreign key dari tb_siswa
+    # 2. HAPUS KELAS LAMA (CARA LEBIH AMAN MENGHINDARI ERROR 500)
     kelas_lama = db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).all()
     for kl in kelas_lama:
-        db.query(models.Siswa).filter(models.Siswa.id_kelas_diterima == kl.id_kelas).update({
-            "id_kelas_diterima": None, 
-            "status_validasi_nilai": "Menunggu Proses"
-        })
-    
-    # TAMBAHAN: Simpan (commit) pemutusan relasi ke database SEKARANG JUGA
-    db.commit()
+        # A. Putuskan relasi siswa secara eksplisit satu per satu
+        siswa_terdampak = db.query(models.Siswa).filter(models.Siswa.id_kelas_diterima == kl.id_kelas).all()
+        for s in siswa_terdampak:
+            s.id_kelas_diterima = None
+            s.status_validasi_nilai = "Menunggu Proses"
+        
+        db.commit() # Simpan pemutusan relasi ke database
 
-    # Setelah relasi benar-benar terputus dan tersimpan, baru hapus kelasnya
-    db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).delete()
+        # B. Hapus objek kelasnya
+        db.delete(kl)
+    
+    db.commit() # Simpan penghapusan kelas ke database
     
     # 3. Masukkan kelas yang baru
     for kelas in data.daftar_kelas:

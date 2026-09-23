@@ -82,14 +82,20 @@ class AdminKuotaFragment : Fragment() {
                     binding.edtNamaKelas4.text?.clear()
                     binding.edtKuotaKelas4.text?.clear()
                 } else {
-                    Toast.makeText(requireContext(), "Gagal mengatur kuota", Toast.LENGTH_SHORT).show()
+                    // --- BAGIAN INI YANG DIUBAH UNTUK MELIHAT ERROR ASLI DARI SERVER ---
+                    val errorMsg = response.errorBody()?.string() ?: "Error Kosong"
+                    val code = response.code()
+                    Toast.makeText(requireContext(), "Gagal ($code): $errorMsg", Toast.LENGTH_LONG).show()
+                    // -------------------------------------------------------------------
                 }
             }
 
             override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                 binding.progressBarKuota.visibility = View.GONE
                 binding.btnSimpanKuota.isEnabled = true
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                // --- BAGIAN INI JUGA DIUBAH AGAR TOAST LEBIH LAMA MUNCULNYA ---
+                Toast.makeText(requireContext(), "Koneksi Error: ${t.message}", Toast.LENGTH_LONG).show()
+                // --------------------------------------------------------------
             }
         })
     }
