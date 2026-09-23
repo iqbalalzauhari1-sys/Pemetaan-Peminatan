@@ -130,24 +130,28 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
     total_kuota = sum([k.kuota_kelas for k in data.daftar_kelas])
     nama_pem_upper = data.nama_peminatan.upper()
     
-    # 1. Cek apakah jurusan sudah ada
     jurusan = db.query(models.Peminatan).filter(models.Peminatan.nama_peminatan == nama_pem_upper).first()
     
     if not jurusan:
-        # Jika belum ada, buat baru
         jurusan = models.Peminatan(nama_peminatan=nama_pem_upper, kapasitas_total=total_kuota)
         db.add(jurusan)
         db.commit()
         db.refresh(jurusan)
     else:
-        # Jika sudah ada, update total kuotanya
         jurusan.kapasitas_total = total_kuota
         db.commit()
 
-    # 2. Hapus data kelas lama milik jurusan ini (Reset) agar tidak menumpuk
-    db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).delete()
+    # Hapus relasi dengan aman sebelum menghapus kelas
+    kelas_lama = db.query(models.Kelas).filter(models.Kelas.id_peminatan == jurusan.id_peminatan).all()
+    for kl in kelas_lama:
+        db.query(models.Siswa).filter(models.Siswa.id_kelas_diterima == kl.id_kelas).update(
+            {"id_kelas_diterima": None, "status_validasi_nilai": "Menunggu Proses"}, 
+            synchronize_session=False
+        )
+        db.commit()
+        db.delete(kl)
+        db.commit()
     
-    # 3. Masukkan kelas yang baru
     for kelas in data.daftar_kelas:
         kelas_baru = models.Kelas(
             nama_kelas=kelas.nama_kelas, 
@@ -166,7 +170,7 @@ def eksekusi_penjurusan_global(db: Session = Depends(get_db)):
     if not semua_siswa:
         raise HTTPException(status_code=400, detail="Belum ada siswa yang mengisi nilai akademik.")
 
-    # 1. Normalisasi (SAW) - Cari Nilai Maksimal Global
+    # 1. Normalisasi  - Cari Nilai Maksimal Global
     max_raport = max([s.nilai_raport for s in semua_siswa])
     max_literasi = max([s.nilai_literasi for s in semua_siswa])
     max_numerasi = max([s.nilai_numerasi for s in semua_siswa])
