@@ -11,7 +11,7 @@ import io
 models.Base.metadata.create_all(bind=engine)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-app = FastAPI(title="API Pemetaan Peminatan Siswa Super Algoritma")
+app = FastAPI()
 
 def get_db():
     db = SessionLocal()
@@ -22,7 +22,7 @@ def get_db():
 
 @app.get("/")
 def read_root():
-    return {"pesan": "Server Backend Penjurusan 2.0 (With Class Distribution) MENYALA!"}
+    return {"message": "API is online"}
 
 @app.post("/register/")
 def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)):
@@ -47,7 +47,7 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     db.add(db_siswa)
     db.commit()
     
-    return {"status": "Sukses", "pesan": "Registrasi berhasil!"}
+    return {"status": "Sukses", "message": "Registrasi berhasil!"}
 
 @app.post("/login/")
 def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
