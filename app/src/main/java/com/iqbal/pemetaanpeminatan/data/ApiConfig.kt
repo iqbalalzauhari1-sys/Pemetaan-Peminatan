@@ -20,7 +20,6 @@ class ApiConfig {
                 .build()
 
             val retrofit = Retrofit.Builder()
-                // Pastikan menggunakan URL Railway yang diakhiri garis miring (/)
                 .baseUrl("https://pemetaan-peminatan-production.up.railway.app/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)

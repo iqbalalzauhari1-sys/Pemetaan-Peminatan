@@ -1,10 +1,12 @@
 package com.iqbal.pemetaanpeminatan
 
+import android.R
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -32,6 +34,9 @@ class InputPribadiFragment : Fragment() {
 
         val sharedPref = requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val nisnAktif = SessionManager(requireContext()).getNisn() ?: ""
+        val statusList = arrayOf("Kandung", "Tiri")
+        val adapter = ArrayAdapter(requireContext(), R.layout.simple_dropdown_item_1line, statusList)
+        binding.dropdownStatusKeluarga.setAdapter(adapter)
 
         if (nisnAktif.isNotEmpty()) {
             muatDataLama(nisnAktif)
@@ -96,7 +101,7 @@ class InputPribadiFragment : Fragment() {
                 nisn = nisnAktif,
                 tempat_tanggal_lahir = gabunganTtl,
                 alamat_siswa = binding.edtAlamatSiswa.text.toString(),
-                status_keluarga = binding.edtStatusKeluarga.text.toString(),
+                status_keluarga = binding.dropdownStatusKeluarga.text.toString(),
                 anak_ke = anakKe,
                 asal_sekolah = binding.edtAsalSekolah.text.toString(),
                 nama_ayah = binding.edtNamaAyah.text.toString(),
@@ -187,7 +192,7 @@ class InputPribadiFragment : Fragment() {
 
                     // 2. Isi Data Pribadi
                     binding.edtAlamatSiswa.setText(data.alamatSiswa ?: "")
-                    binding.edtStatusKeluarga.setText(data.statusKeluarga ?: "")
+                    binding.dropdownStatusKeluarga.setText(data.statusKeluarga ?: "", false)
                     binding.edtAnakKe.setText(data.anakKe?.toString() ?: "")
                     binding.edtAsalSekolah.setText(data.asalSekolah ?: "")
 
