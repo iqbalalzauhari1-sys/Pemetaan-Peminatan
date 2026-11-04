@@ -1,7 +1,7 @@
 fastapi
 uvicorn
-psycopg2-binary
 sqlalchemy
+psycopg2-binary
 pydantic
 passlib
 python-jose
