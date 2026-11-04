@@ -3,22 +3,25 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Ambil URL dari Environment Variable Vercel
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "")
+# 1. Ambil URL mentah dari Vercel Environment Variables
+raw_url = os.getenv("DATABASE_URL", "")
 
-# Jika kosong, gunakan fallback default
-if not SQLALCHEMY_DATABASE_URL:
-    SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Smanway2026@db.fjkqpmzljkfesmpqgdxm.supabase.co:5432/postgres"
+if not raw_url:
+    # Fallback jika kosong
+    SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:Smanway2026@db.fjkqpmzljkfesmpqgdxm.supabase.co:6543/postgres"
+else:
+    # 2. Bersihkan string dari prefix yang salah atau ketinggalan zaman, lalu paksa jadi +psycopg2
+    clean_url = raw_url.strip()
+    
+    if "://" in clean_url:
+        # Ambil bagian setelah '://' (user:password@host:port/dbname)
+        user_pass_host = clean_url.split("://", 1)[1]
+        SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{user_pass_host}"
+    else:
+        # Jaga-jaga jika isinya hanya host/ip
+        SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{clean_url}"
 
-# Paksa ganti dialect agar selalu menggunakan psycopg2 (mencegah error pencarian modul 'psycopg' v3)
-if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
-    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
-elif SQLALCHEMY_DATABASE_URL.startswith("postgresql://"):
-    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
-elif not "psycopg2" in SQLALCHEMY_DATABASE_URL:
-    # Jaga-jaga jika formatnya langsung domain
-    SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{SQLALCHEMY_DATABASE_URL.split('://')[-1]}"
-
+# Buat engine dengan konfigurasi aman
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
