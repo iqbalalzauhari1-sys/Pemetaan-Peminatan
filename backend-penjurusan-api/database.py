@@ -2,16 +2,20 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Ambil URL dari Environment Variables
-url = os.getenv("DATABASE_URL", "postgresql://postgres:Smanway2026@db.fjkqpmzljkfesmpqgdxm.supabase.co:6543/postgres")
+# 1. Ambil URL (dari Vercel Environment Variables atau default)
+raw_url = os.getenv("DATABASE_URL", "postgresql://postgres:Smanway2026@db.fjkqpmzljkfesmpqgdxm.supabase.co:6543/postgres")
 
-# Ubah prefix agar cocok dengan psycopg versi 3
-if url.startswith("postgres://"):
-    url = url.replace("postgres://", "postgresql+psycopg://", 1)
-elif url.startswith("postgresql://") and not url.startswith("postgresql+psycopg://"):
-    url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+# 2. Buang awalan apa pun (postgres://, postgresql://, dll) dan paksa pakai psycopg2
+if "://" in raw_url:
+    # Ambil semua teks SETELAH '://'
+    db_path = raw_url.split("://", 1)[1]
+    # Bangun ulang URL secara absolut
+    SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{db_path}"
+else:
+    SQLALCHEMY_DATABASE_URL = raw_url
 
-engine = create_engine(url, pool_pre_ping=True)
+# 3. Buat Engine
+engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
