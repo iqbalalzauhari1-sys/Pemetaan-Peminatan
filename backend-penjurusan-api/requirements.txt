@@ -1,9 +1,9 @@
 fastapi
 uvicorn
-SQLAlchemy==2.0.36
-psycopg2-binary==2.9.12
+sqlalchemy
+psycopg2-binary
 passlib
 bcrypt
 pydantic
-pandas==2.3.2
+pandas
 openpyxl
