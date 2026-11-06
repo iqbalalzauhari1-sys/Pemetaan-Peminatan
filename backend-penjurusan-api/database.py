@@ -7,7 +7,7 @@ load_dotenv()
 
 # Masukkan URL database secara langsung ke sini agar tidak terbaca kosong
 SQLALCHEMY_DATABASE_URL = (
-    "postgresql+psycopg2://postgres:Smanway2026@db.xdwlwlfdfkiedpntvglz.supabase.co:5432/postgres"
+    "postgresql://postgres.xdwlwlfdfkiedpntvglz:Smanway2026@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres"
 )
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
