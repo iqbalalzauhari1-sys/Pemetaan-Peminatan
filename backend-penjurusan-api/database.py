@@ -3,12 +3,12 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Memuat variabel dari file .env
+# 1. Panggil load_dotenv di paling atas
 load_dotenv()
 
+# 2. Ambil variabel dari .env
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Validasi pengaman jika URL kosong
 if not SQLALCHEMY_DATABASE_URL:
     raise ValueError(
         "DATABASE_URL belum diatur di dalam file .env atau environment variable!"
