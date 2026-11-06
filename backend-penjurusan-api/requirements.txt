@@ -1,9 +1,8 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-passlib
-bcrypt
-pydantic
-pandas
-openpyxl
+fastapi==0.115.4
+uvicorn==0.32.0
+SQLAlchemy==2.0.36
+psycopg2-binary==2.9.10
+passlib[bcrypt]==1.7.4
+pydantic==2.9.2
+pandas==2.2.3
+openpyxl==3.1.5
