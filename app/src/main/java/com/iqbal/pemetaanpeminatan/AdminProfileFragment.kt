@@ -37,7 +37,7 @@ class AdminProfileFragment : Fragment() {
         binding.btnUnduhLaporan.setOnClickListener {
             Toast.makeText(requireContext(), "Menyiapkan file Excel...", Toast.LENGTH_SHORT).show()
             // Sesuaikan IP ini dengan IP yang ada di ApiConfig.kt Anda!
-            val url = "https://pemetaan-peminatan-production.up.railway.app/export-laporan/"
+            val url = "[https://pemetaan-peminatan.vercel.app/export-laporan/](https://pemetaan-peminatan.vercel.app/export-laporan/)"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
         }
