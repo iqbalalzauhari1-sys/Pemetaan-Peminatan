@@ -1,15 +1,12 @@
-import os
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-load_dotenv()
+# URL Database Supabase-mu (menggunakan port 5432 langsung)
+SQLALCHEMY_DATABASE_URL = (
+    "postgresql://postgres:Smanway2026@db.xdwlwlfdfkiedpntvglz.supabase.co:5432/postgres"
+)
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
-if not SQLALCHEMY_DATABASE_URL:
-    raise RuntimeError("DATABASE_URL must be set in the environment or .env file")
-
-# Sertakan connect_args sslmode=require
+# Wajib gunakan sslmode=require untuk Supabase
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     connect_args={"sslmode": "require"},
