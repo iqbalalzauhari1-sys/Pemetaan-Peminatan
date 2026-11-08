@@ -5,12 +5,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
-# Gunakan string koneksi yang menyertakan parameter sslmode=require
-SQLALCHEMY_DATABASE_URL = (
-    "postgresql+psycopg2://postgres:Smanway2026@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres"
-)
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+if not SQLALCHEMY_DATABASE_URL:
+    raise RuntimeError("DATABASE_URL must be set in the environment or .env file")
 
-# Tambahkan connect_args untuk mengaktifkan SSL yang diminta Supabase
+# Sertakan connect_args sslmode=require
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     connect_args={"sslmode": "require"},
