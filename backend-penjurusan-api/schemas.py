@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 
 # Skema JSON saat Siswa Mendaftar
@@ -48,3 +48,33 @@ class UpdateProfil(BaseModel):
     pekerjaan_wali: str | None = None
     no_telp_wali: str | None = None
     alamat_wali: str | None = None
+
+class UpdateNilaiRequest(BaseModel):
+    siswa_id: int
+    # Hasil psikotes literasi dan numerasi (0 - 100)
+    nilai_literasi_psikotes: float = Field(..., ge=0.0, le=100.0, description="Nilai Tes Literasi (Psikotes)")
+    nilai_numerasi_psikotes: float = Field(..., ge=0.0, le=100.0, description="Nilai Tes Numerasi (Psikotes)")
+    
+    # Nilai pendukung lain jika ada
+    nilai_rata_rata_raport: float = Field(..., ge=0.0, le=100.0, description="Rata-rata Nilai Raport")
+
+    @field_validator('nilai_literasi_psikotes', 'nilai_numerasi_psikotes', 'nilai_rata_rata_raport')
+    @classmethod
+    def check_valid_score(cls, v: float) -> float:
+        if v < 0 or v > 100:
+            raise ValueError("Nilai harus berada dalam rentang 0 hingga 100")
+        return round(v, 2)
+
+
+class KriteriaBobotSchema(BaseModel):
+    kriteria_id: str
+    nama_kriteria: str
+    bobot: float = Field(..., ge=0.0, le=1.0)
+    tipe: str = Field(..., pattern="^(benefit|cost)$")
+
+
+class EksekusiPeminatanResponse(BaseModel):
+    status: str
+    message: str
+    total_diproses: int
+    berhasil_dialokasikan: int

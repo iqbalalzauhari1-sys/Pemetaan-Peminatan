@@ -7,12 +7,16 @@ from database import engine, SessionLocal
 from fastapi.responses import StreamingResponse
 from passlib.context import CryptContext
 import pandas as pd
+import peminatan
 import io
 
 models.Base.metadata.create_all(bind=engine)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-app = FastAPI()
+app = FastAPI(title="API Peminatan Siswa SMAN 1 Wanayasa")
+
+# Include router peminatan
+app.include_router(peminatan.router)
 
 def get_db():
     db = SessionLocal()
