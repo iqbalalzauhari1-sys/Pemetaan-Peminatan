@@ -1,15 +1,15 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# URL Database Supabase-mu (menggunakan port 5432 langsung)
-SQLALCHEMY_DATABASE_URL = (
-    "postgresql://postgres:Smanway2026@db.xdwlwlfdfkiedpntvglz.supabase.co:5432/postgres"
-)
+# Minta aplikasi untuk selalu membaca URL dari Environment Variable Vercel
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Wajib gunakan sslmode=require untuk Supabase
+if not SQLALCHEMY_DATABASE_URL:
+    raise ValueError("DATABASE_URL belum diatur di Vercel!")
+
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
-    connect_args={"sslmode": "require"},
     pool_pre_ping=True
 )
 
