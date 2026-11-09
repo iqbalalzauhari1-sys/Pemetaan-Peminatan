@@ -27,12 +27,12 @@ def read_root():
 
 @app.post("/register/")
 def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)):
+    # 1. Cek apakah NISN sudah ada
     cek_user = db.query(models.User).filter(models.User.username == data.nisn).first()
     if cek_user:
         raise HTTPException(status_code=400, detail="NISN sudah terdaftar!")
 
-    # Enkripsi password sebelum dimasukkan ke database
-    # hashed_password = pwd_context.hash(data.password)
+    # 2. Simpan Akun Login (Plain text, sama seperti data dummy)
     db_user = models.User(
         username=data.nisn, 
         password=data.password, 
@@ -42,12 +42,11 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     db.commit()
     db.refresh(db_user) 
 
-    # Simpan Profil Awal (Hanya NISN dan Nama)
+    # 3. Simpan Profil Awal Siswa
     db_siswa = models.Siswa(
         id_user=db_user.id_user,
         nisn=data.nisn,
         nama_lengkap=data.nama_lengkap
-        # Field alamat, data ortu, dll otomatis bernilai NULL di database
     )
     db.add(db_siswa)
     db.commit()
@@ -56,26 +55,22 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
 
 @app.post("/login/")
 def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
-    # 1. Cari user di database berdasarkan NISN/Username
+    # 1. Cari akun berdasarkan NISN
     user = db.query(models.User).filter(models.User.username == data.nisn).first()
     
-    # 2. Jika user tidak ditemukan, tolak
     if not user:
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
 
-    # 3. Cek kecocokan password secara LANGSUNG (Teks Biasa)
-    # Gunakan str() untuk berjaga-jaga jika tipe datanya integer di database
+    # 2. Bandingkan password secara langsung (teks biasa)
     if str(data.password) != str(user.password):
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
         
-    # 4. Jika cocok, berikan respons berhasil
     return {
         "status": "Sukses", 
         "pesan": "Login berhasil!", 
         "role": user.role, 
         "nisn": user.username
     }
-
 @app.get("/profil-siswa/{nisn}")
 def profil_siswa(nisn: str, db: Session = Depends(get_db)):
     siswa = db.query(models.Siswa).filter(models.Siswa.nisn == nisn).first()
