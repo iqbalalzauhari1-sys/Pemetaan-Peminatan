@@ -56,26 +56,25 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
 
 @app.post("/login/")
 def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
+    # 1. Cari user di database berdasarkan NISN/Username
     user = db.query(models.User).filter(models.User.username == data.nisn).first()
-    # if not user or not pwd_context.verify(data.password, user.password):
-    #    raise HTTPException(status_code=401, detail="NISN atau Password salah!")
-    # Pastikan data user ditemukan terlebih dahulu
+    
+    # 2. Jika user tidak ditemukan, tolak
     if not user:
-        raise HTTPException(status_code=401, detail="nisn atau password salah!")
-    # Cek kecocokan password untuk KEDUA format
-    is_password_valid = False
+        raise HTTPException(status_code=401, detail="NISN atau password salah!")
 
-    if user.password.startswith("$2b$"):
-        # Jika password di DB adalah enkripsi (hasil dari register baru)
-        is_password_valid = pwd_context.verify(data.password, user.password)
-    else:
-        # Jika password di DB adalah teks biasa (hasil dari data dummy)
-        is_password_valid = (data.password == user.password)
-
-    # Jika kedua metode di atas tidak ada yang cocok, tolak login
-    if not is_password_valid:
-        raise HTTPException(status_code=401, detail="nisn atau password salah!")
-    return {"status": "Sukses", "pesan": "Login berhasil!", "role": user.role, "nisn": user.username}
+    # 3. Cek kecocokan password secara LANGSUNG (Teks Biasa)
+    # Gunakan str() untuk berjaga-jaga jika tipe datanya integer di database
+    if str(data.password) != str(user.password):
+        raise HTTPException(status_code=401, detail="NISN atau password salah!")
+        
+    # 4. Jika cocok, berikan respons berhasil
+    return {
+        "status": "Sukses", 
+        "pesan": "Login berhasil!", 
+        "role": user.role, 
+        "nisn": user.username
+    }
 
 @app.get("/profil-siswa/{nisn}")
 def profil_siswa(nisn: str, db: Session = Depends(get_db)):
