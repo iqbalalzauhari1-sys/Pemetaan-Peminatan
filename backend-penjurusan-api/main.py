@@ -32,7 +32,7 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     if cek_user:
         raise HTTPException(status_code=400, detail="NISN sudah terdaftar!")
 
-    # 2. Simpan Akun Login (Plain text, sama seperti data dummy)
+    # 2. Simpan password langsung sebagai teks biasa
     db_user = models.User(
         username=data.nisn, 
         password=data.password, 
@@ -42,7 +42,7 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     db.commit()
     db.refresh(db_user) 
 
-    # 3. Simpan Profil Awal Siswa
+    # 3. Simpan data profil awal siswa
     db_siswa = models.Siswa(
         id_user=db_user.id_user,
         nisn=data.nisn,
