@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiConfig {
-    private const val BASE_URL = "http://10.0.2.2:8000/" // Ganti IP server FastAPI jika production
+    private const val BASE_URL = "https://pemetaan-peminatan-2uc4l3bn3-iqbalalzauhari1-4880s-projects.vercel.app/" // Ganti IP server FastAPI jika production
 
     fun getApiService(context: Context? = null, onUnauthorized: (() -> Unit)? = null): ApiService {
         val clientBuilder = OkHttpClient.Builder()
