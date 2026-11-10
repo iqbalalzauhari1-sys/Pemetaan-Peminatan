@@ -15,6 +15,14 @@ models.Base.metadata.create_all(bind=engine)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 app = FastAPI(title="API Peminatan Siswa SMAN 1 Wanayasa")
 
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Mencocokkan password dari form login dengan hash di DB"""
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str) -> str:
+    """Mengubah password plain text menjadi hash sebelum disimpan ke DB"""
+    return pwd_context.hash(password)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

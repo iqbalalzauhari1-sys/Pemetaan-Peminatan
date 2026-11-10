@@ -1,13 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
-
+from passlib.context import CryptContext
 # Import langsung dari file root
 from database import get_db
 import models
 from schemas import UpdateNilaiRequest, EksekusiPeminatanResponse
 
 router = APIRouter(prefix="/api/peminatan", tags=["Peminatan SAW & Greedy"])
+
+# Inisialisasi hashing bcrypt
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_password_hash(password: str) -> str:
+    """Mengubah password plain text menjadi hash"""
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Membandingkan password dari form Android dengan hash di Database"""
+    return pwd_context.verify(plain_password, hashed_password)
 
 # ==========================================
 # HELPER ALGORITMA SAW & GREEDY
@@ -170,3 +181,45 @@ def eksekusi_peminatan_siswa(db: Session = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Terjadi kesalahan saat memproses eksekusi: {str(e)}"
         )
+
+@router.post("/register")
+def register_siswa(request: RegisterRequest, db: Session = Depends(get_db)):
+    # 1. Cek duplikasi NISN
+    existing_siswa = db.query(models.Siswa).filter(models.Siswa.nisn == request.nisn).first()
+    if existing_siswa:
+        raise HTTPException(status_code=400, detail="NISN sudah terdaftar.")
+
+    # 2. Encrypt/Hash password siswa baru
+    hashed_password = get_password_hash(request.password)
+
+    # 3. Simpan ke database
+    siswa_baru = models.Siswa(
+        nisn=request.nisn,
+        nama_lengkap=request.nama_lengkap,
+        password=hashed_password  # <-- Simpan variabel hashed_password
+    )
+    db.add(siswa_baru)
+    db.commit()
+    db.refresh(siswa_baru)
+
+    return {"status": "success", "message": "Pendaftaran berhasil, silakan login."}
+
+@router.post("/login")
+def login_siswa(request: LoginRequest, db: Session = Depends(get_db)):
+    # 1. Cari siswa berdasarkan NISN
+    siswa = db.query(models.Siswa).filter(models.Siswa.nisn == request.username).first()
+
+    # 2. Verifikasi ketersediaan akun dan kecocokan hash password
+    if not siswa or not verify_password(request.password, siswa.password):
+        raise HTTPException(
+            status_code=401,
+            detail="NISN / Username atau password salah."
+        )
+
+    # 3. Kembalikan respon sukses / token
+    return {
+        "status": "success",
+        "message": "Login berhasil",
+        "user_id": siswa.id,
+        "nama": siswa.nama_lengkap
+    }
