@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
-from streamlit import user
 import models, schemas
 from database import engine, SessionLocal
 from fastapi.responses import StreamingResponse
 from passlib.context import CryptContext
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import peminatan
 import io
@@ -14,6 +14,14 @@ models.Base.metadata.create_all(bind=engine)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 app = FastAPI(title="API Peminatan Siswa SMAN 1 Wanayasa")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Include router peminatan
 app.include_router(peminatan.router)
