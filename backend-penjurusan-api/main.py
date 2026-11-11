@@ -48,11 +48,10 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     if cek_user:
         raise HTTPException(status_code=400, detail="NISN sudah terdaftar!")
 
-    # 2. Simpan password menggunakan HASHING (bukan teks biasa)
-    hashed_password = get_password_hash(data.password)
+    # 2. Simpan password langsung sebagai teks biasa (TANPA HASH)
     db_user = models.User(
         username=data.nisn, 
-        password=hashed_password, # Gunakan password yang sudah di-hash
+        password=data.password,  # <-- Langsung mengambil input asli dari form
         role="siswa"
     )
     db.add(db_user)
@@ -68,7 +67,7 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     db.add(db_siswa)
     db.commit()
     
-    # UBAH "message" menjadi "pesan" agar terbaca oleh RegisterResponse.kt di Android
+    # Kunci "pesan" tetap dipertahankan agar terbaca oleh Android
     return {"status": "Sukses", "pesan": "Registrasi berhasil!"}
 
 @app.post("/login/")
@@ -80,8 +79,8 @@ def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
 
-    # 3. Bandingkan password menggunakan verifikasi HASH
-    if not verify_password(data.password, user.password):
+    # 3. Bandingkan password secara langsung (teks vs teks)
+    if str(data.password) != str(user.password): # <-- Membandingkan string biasa
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
 
     return {
