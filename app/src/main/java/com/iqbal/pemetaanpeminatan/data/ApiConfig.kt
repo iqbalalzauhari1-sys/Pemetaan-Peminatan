@@ -15,6 +15,13 @@ object ApiConfig {
     fun getApiService(context: Context? = null, onUnauthorized: (() -> Unit)? = null): ApiService {
         val clientBuilder = OkHttpClient.Builder()
 
+        // 1. Tambahkan konfigurasi OkHttpClient dengan timeout yang lebih lama (contoh: 120 detik)
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .build()
+
         if (context != null) {
             val sessionManager = SessionManager(context)
             val authInterceptor = Interceptor { chain ->

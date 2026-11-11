@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from httpcore import request
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 import models, schemas
@@ -73,6 +74,9 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
 def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
     # 1. Cari akun berdasarkan NISN
     user = db.query(models.User).filter(models.User.username == data.nisn).first()
+
+    if not pwd_context.verify(data.password, user.password):
+        raise HTTPException(status_code=401, detail="NISN atau Password salah!")
     
     if not user:
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
