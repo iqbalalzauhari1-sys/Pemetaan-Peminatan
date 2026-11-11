@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Depends, HTTPException
-from httpcore import request
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 import models, schemas
@@ -75,22 +74,21 @@ def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
     # 1. Cari akun berdasarkan NISN
     user = db.query(models.User).filter(models.User.username == data.nisn).first()
 
-    if not pwd_context.verify(data.password, user.password):
-        raise HTTPException(status_code=401, detail="NISN atau Password salah!")
-    
+    # 2. Cek eksistensi user terlebih dahulu
     if not user:
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
 
-    # 2. Bandingkan password secara langsung (teks biasa)
+    # 3. Bandingkan password teks biasa
     if str(data.password) != str(user.password):
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
-        
+
     return {
         "status": "Sukses", 
         "pesan": "Login berhasil!", 
         "role": user.role, 
         "nisn": user.username
     }
+
 @app.get("/profil-siswa/{nisn}")
 def profil_siswa(nisn: str, db: Session = Depends(get_db)):
     siswa = db.query(models.Siswa).filter(models.Siswa.nisn == nisn).first()
@@ -201,7 +199,12 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
 # SUPER ALGORITMA: SPK + Distribusi Massal (1 Tombol)
 @app.post("/eksekusi-penjurusan-global/")
 def eksekusi_penjurusan_global(db: Session = Depends(get_db)):
-    semua_siswa = db.query(models.Siswa).filter(models.Siswa.nilai_raport != None).all()
+    semua_siswa = db.query(models.Siswa).filter(
+        models.Siswa.nilai_raport != None,
+        models.Siswa.nilai_literasi != None,
+        models.Siswa.nilai_numerasi != None
+    ).all()
+    
     if not semua_siswa:
         raise HTTPException(status_code=400, detail="Belum ada siswa yang mengisi nilai akademik.")
 

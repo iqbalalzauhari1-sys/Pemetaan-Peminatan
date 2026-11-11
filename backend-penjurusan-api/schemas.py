@@ -44,10 +44,10 @@ class UpdateProfil(BaseModel):
     alamat_ortu: str
     no_telp_ortu: str
     # Data tambahan opsional
-    nama_wali: str | None = None
-    pekerjaan_wali: str | None = None
-    no_telp_wali: str | None = None
-    alamat_wali: str | None = None
+    nama_wali: Optional[str] = None
+    pekerjaan_wali: Optional[str] = None
+    no_telp_wali: Optional[str] = None
+    alamat_wali: Optional[str] = None
 
 class UpdateNilaiRequest(BaseModel):
     siswa_id: int
