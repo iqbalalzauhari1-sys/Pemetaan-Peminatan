@@ -48,10 +48,11 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     if cek_user:
         raise HTTPException(status_code=400, detail="NISN sudah terdaftar!")
 
-    # 2. Simpan password langsung sebagai teks biasa
+    # 2. Simpan password menggunakan HASHING (bukan teks biasa)
+    hashed_password = get_password_hash(data.password)
     db_user = models.User(
         username=data.nisn, 
-        password=data.password, 
+        password=hashed_password, # Gunakan password yang sudah di-hash
         role="siswa"
     )
     db.add(db_user)
@@ -67,7 +68,8 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     db.add(db_siswa)
     db.commit()
     
-    return {"status": "Sukses", "message": "Registrasi berhasil!"}
+    # UBAH "message" menjadi "pesan" agar terbaca oleh RegisterResponse.kt di Android
+    return {"status": "Sukses", "pesan": "Registrasi berhasil!"}
 
 @app.post("/login/")
 def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
@@ -78,8 +80,8 @@ def login_user(data: schemas.LoginUser, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
 
-    # 3. Bandingkan password teks biasa
-    if str(data.password) != str(user.password):
+    # 3. Bandingkan password menggunakan verifikasi HASH
+    if not verify_password(data.password, user.password):
         raise HTTPException(status_code=401, detail="NISN atau password salah!")
 
     return {
@@ -200,9 +202,9 @@ def setup_peminatan(data: schemas.InputPeminatan, db: Session = Depends(get_db))
 @app.post("/eksekusi-penjurusan-global/")
 def eksekusi_penjurusan_global(db: Session = Depends(get_db)):
     semua_siswa = db.query(models.Siswa).filter(
-        models.Siswa.nilai_raport != None,
-        models.Siswa.nilai_literasi != None,
-        models.Siswa.nilai_numerasi != None
+        models.Siswa.nilai_raport.isnot(None),
+        models.Siswa.nilai_literasi.isnot(None), # Hasil psikotes
+        models.Siswa.nilai_numerasi.isnot(None)
     ).all()
     
     if not semua_siswa:
