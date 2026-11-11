@@ -43,22 +43,20 @@ def read_root():
 
 @app.post("/register/")
 def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)):
-    # 1. Cek apakah NISN sudah ada
     cek_user = db.query(models.User).filter(models.User.username == data.nisn).first()
     if cek_user:
         raise HTTPException(status_code=400, detail="NISN sudah terdaftar!")
 
-    # 2. Simpan password langsung sebagai teks biasa (TANPA HASH)
+    # SIMPAN TEKS ASLI: Langsung ambil dari data.password
     db_user = models.User(
         username=data.nisn, 
-        password=data.password,  # <-- Langsung mengambil input asli dari form
+        password=data.password, 
         role="siswa"
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user) 
 
-    # 3. Simpan data profil awal siswa
     db_siswa = models.Siswa(
         id_user=db_user.id_user,
         nisn=data.nisn,
@@ -67,7 +65,6 @@ def register_siswa(data: schemas.PendaftaranSiswa, db: Session = Depends(get_db)
     db.add(db_siswa)
     db.commit()
     
-    # Kunci "pesan" tetap dipertahankan agar terbaca oleh Android
     return {"status": "Sukses", "pesan": "Registrasi berhasil!"}
 
 @app.post("/login/")

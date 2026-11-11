@@ -29,15 +29,19 @@ class RegisterFragment : Fragment() {
         setupObservers()
 
         binding.btnRegister.setOnClickListener {
-            val nisn = binding.edtRegNisn.text.toString()
-            val password = binding.edtRegPassword.text.toString()
-            val nama = binding.edtRegNama.text.toString()
+            // 1. Ambil inputan sebagai teks mentah (plain text) tanpa dienkripsi
+            val nisnInput = binding.edtRegNisn.text.toString().trim()
+            val namaInput = binding.edtRegNama.text.toString().trim()
+            val passwordInput = binding.edtRegPassword.text.toString().trim() // Teks Asli
 
-            if (nisn.isNotEmpty() && password.isNotEmpty() && nama.isNotEmpty()) {
-                viewModel.daftarSiswa(nisn, password, nama)
-            } else {
-                Toast.makeText(requireContext(), "Harap lengkapi NISN, Password, dan Nama", Toast.LENGTH_SHORT).show()
+            // 2. Validasi kosong (opsional tapi disarankan)
+            if (nisnInput.isEmpty() || namaInput.isEmpty() || passwordInput.isEmpty()) {
+                Toast.makeText(requireContext(), "Semua kolom harus diisi!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            // 3. Kirim ke API menggunakan ViewModel
+            viewModel.daftarSiswa(nisnInput, passwordInput, namaInput)
         }
 
         // Kembali ke halaman Login jika sudah punya akun
