@@ -7,7 +7,6 @@ from fastapi.responses import StreamingResponse
 from passlib.context import CryptContext
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
-import peminatan
 import io
 
 models.Base.metadata.create_all(bind=engine)
@@ -28,11 +27,8 @@ app.add_middleware(
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
-
-# Include router peminatan
-app.include_router(peminatan.router)
 
 def get_db():
     db = SessionLocal()
